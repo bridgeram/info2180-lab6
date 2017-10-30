@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+
+</head>
+
+<input  id= "button" type=button value="Search">        
+   
+</html>
+
+<script>
+    
+    var B=document.getElementById("button");
+    
+        B.addEventListener("click", function(){
+            
+            $.ajax({ url: "https://infolab6-ssjkyzer.c9users.io/request.php?q=definition", 
+            
+                    method: "GET"}).done(function(result){
+                        
+                    window.alert(result);
+                        
+                    });
+        });
+        
+</script>
+
