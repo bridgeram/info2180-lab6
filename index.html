@@ -4,7 +4,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
 </head>
 
-<input type=text id="tfield" >
+<input type=text id="tfield">
 <input  id= "button" type=button value="Search">   
   <div id="result"></div>
   
@@ -13,11 +13,11 @@
 <script>
     
     var B=document.getElementById("button");
-    var R=(document.getElementById("tfield")).value;
+    var R=(document.getElementById("tfield"));
     
         B.addEventListener("click", function(){
             
-            $.ajax({url:("https://infolab6-ssjkyzer.c9users.io/request.php?q="+R), 
+            $.ajax({url:("https://infolab6-ssjkyzer.c9users.io/request.php?q="+R.value), 
             
                     method:"GET"}).done(function(result){
                         document.getElementById("result").innerHTML=result;
