@@ -1,29 +1,116 @@
 
 <html>
+    
     <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
 </head>
+<center>
+<form>
+<p><strong>Get the defintion for a Word:</strong></p>
+<p>Look up any of these word (ajax, definition, bar, html, css,
+javascript or php)</p>
 
 <input type=text id="tfield">
-<input  id= "button" type=button value="Search">   
+<input id= "button" type=button value="Search">   
+<input id="def" type=button value="Get All Definitions"> 
   <div id="result"></div>
+  </form>
+  </center>
   
 </html>
 
 <script>
-    
-    var B=document.getElementById("button");
-    var R=(document.getElementById("tfield"));
-    
-        B.addEventListener("click", function(){
-            
-            $.ajax({url:("https://infolab6-ssjkyzer.c9users.io/request.php?q="+R.value), 
-            
-                    method:"GET"}).done(function(result){
-                        document.getElementById("result").innerHTML=result;
-                        
-                    });
-        });
-        
-</script>
 
+  window.onload =  function() {
+     
+     document.getElementById("button").addEventListener("click", function(){
+        
+        var word = document.getElementById("tfield").value;
+        var httpRequest = new XMLHttpRequest();
+        var url = "https://infolab6-ssjkyzer.c9users.io/request.php?q=";
+     
+        httpRequest.onreadystatechange =function(){
+        
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200) {
+                    
+                    var response = httpRequest.responseXML;
+                    var list = [];
+                    
+                    for(var i = 0; i<response.getElementsByTagName("definition").length;i++){
+                        
+                       if(response.getElementsByTagName("definition")[i].getAttribute("name") === word){
+                            list    +=  "<h3> "+ response.getElementsByTagName("definition")[i].getAttribute("name").toUpperCase() + "</h3>  "
+                                    +"<p> "       + response.getElementsByTagName("definition")[i].childNodes[0].nodeValue    
+                                    +"</p> <p> -"   + response.getElementsByTagName("definition")[i].getAttribute("author") 
+                                    +"</p>";
+                       }
+                    }
+                    
+                    document.getElementById("result").innerHTML =  list ;
+                    
+                    
+                } else {
+                    alert('There was a problem with the request...');
+                }
+            }
+        };
+        
+       httpRequest.open('GET',url + word, true);
+       httpRequest.send();
+    
+    });   
+    
+    document.getElementById("def").addEventListener("click",function(){
+        
+       
+        var word = "";
+        var httpRequest = new XMLHttpRequest();
+        
+        var url = "https://infolab6-ssjkyzer.c9users.io/request.php?q=&all=true";
+        
+        httpRequest.onreadystatechange = function(){
+            
+            
+           if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200) {
+                    
+                    var response = httpRequest.responseXML;
+                    var list = [];
+                    
+                    for(var i = 0; i<response.getElementsByTagName("definition").length;i++){
+                       
+                        list +=  "<br/><li><strong> "+ response.getElementsByTagName("definition")[i].getAttribute("name").toUpperCase() + " </strong></li> "
+                                +"<p> "       + response.getElementsByTagName("definition")[i].childNodes[0].nodeValue    
+                                +"</p> <p> -"   + response.getElementsByTagName("definition")[i].getAttribute("author") 
+                                +"</p>";
+                    }
+                    
+                    document.getElementById("result").innerHTML = "<al> "+ list +"</al>";
+                    
+                }
+                else{
+                    alert("There was an error recieving the request form the server.");
+                }
+            }
+            
+       };
+        
+         httpRequest.open('GET',url, true);
+         httpRequest.send();
+        
+    });
+    
+ };
+     
+</script>
+    
+    
+<style>
+
+html{magin:800px;}
+
+body{background-color:lightskyblue;}
+
+    
+</style>
